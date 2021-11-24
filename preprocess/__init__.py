@@ -1,6 +1,6 @@
 from dataset import *
 
-Preprocess = Callable[[Dataset, Any], Dataset]
+Preprocess = Callable[[Union[LabeledDataset, UnlabeledDataset], Any], Union[LabeledDataset, UnlabeledDataset]]
 PreprocessPipeline = List[Preprocess]
 
 
