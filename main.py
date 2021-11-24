@@ -65,5 +65,5 @@ def load_and_test_NN(clf: Callable[..., NNClassifier], epochs: int, submission_n
 
 if __name__ == '__main__':
     #load_and_test_NN(AlexNetClassifier, 25, 3, DATASET_PATH, trained_alex_net_PATH)
-    run_alex()
-    #toy_demo()
+    #run_alex()
+    toy_demo()

@@ -6,7 +6,7 @@ PreprocessPipeline = List[Preprocess]
 
 def process_data(dataset: Union[LabeledDataset, UnlabeledDataset],
                  pipeline: PreprocessPipeline,
-                 params: List[Dict[str: Any]]= [{}]) -> Dataset:
+                 params: List[Dict[str, Any]]= [{}]) -> Dataset:
     """
 
     :param dataset:
