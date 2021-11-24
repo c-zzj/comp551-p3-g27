@@ -1,12 +1,10 @@
 """
 This file should be migrated to a jupyter notebook.
 """
-from classifier import *
 from classifier.network.toy_net import *
 from classifier.network.alex_net import *
 from classifier.plugin import *
 from classifier.metric import *
-from dataset import *
 from preprocess import *
 
 
@@ -46,7 +44,7 @@ def run_alex():
             "eps": 1e-8
         })
     alex.set_optimizer(adam)
-    alex.train(5,
+    alex.train(30,
                batch_size=50,
                plugins=[
                    save_model(trained_alex_net_PATH),

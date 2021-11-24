@@ -10,8 +10,6 @@ TRAINING_Y = "labels_l.pkl"
 TRAINING_UL = "images_ul.pkl"
 TEST = "images_test.pkl"
 
-Preprocess = Callable[[Tensor, Tensor], Tensor]
-
 
 class LabeledDataset(Dataset):
     def __init__(self, x: Tensor, y: Tensor, name: Optional[str] = "Training"):

@@ -25,8 +25,8 @@ def save_training_message(folder_path: Path, step: int = 1, empty_previous: bool
     """
     if not folder_path.exists():
         folder_path.mkdir(parents=True)
-        if empty_previous:
-            open(str(folder_path / 'log.txt'), 'w').close()
+        if empty_previous and Path(folder_path / 'log.txt').exists():
+            Path.unlink(folder_path / 'log.txt')
 
     def plugin(clf: NNClassifier, epoch: int) -> None:
         if epoch % step == 0:
