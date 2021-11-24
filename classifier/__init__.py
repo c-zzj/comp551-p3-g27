@@ -7,7 +7,8 @@ from torch import device, Tensor
 import torch
 from pathlib import Path
 import pandas as pd
-import numpy as np
+import matplotlib.pyplot as plt
+
 
 class Function:
     @staticmethod
@@ -97,7 +98,7 @@ class OptimizerProfile:
         self.params = parameters
 
 
-TrainingPlugin = Callable[[Any, int], None]
+TrainingPlugin = Callable[[Any, int, Any], None]
 Metric = Callable[[Tensor, Tensor], float] # pred, true -> result. The higher the better
 
 
@@ -121,6 +122,9 @@ class NNClassifier(Classifier):
         self.network = network().to(self.device)
         self.optim = SGD(self.network.parameters(), lr=1e-3, momentum=0.99)
         self.loss = CrossEntropyLoss()
+        self.training_message = 'No training message.'
+        # temporary variable used for plugins to communicate
+        self._tmp = {}
 
     def load_network(self,
                      folder_path: Path,
@@ -131,7 +135,7 @@ class NNClassifier(Classifier):
         :param epoch:
         :return: a network callable that can be passed to the NNClassifier constructor
         """
-        self.network.load_state_dict(torch.load(folder_path / str(epoch)))
+        self.network.load_state_dict(torch.load(folder_path / f"{epoch}.params"))
 
     def set_optimizer(self, optimizer: OptimizerProfile):
         self.optim = optimizer.optim(self.network.parameters(), **optimizer.params)
@@ -148,12 +152,15 @@ class NNClassifier(Classifier):
               epochs: int,
               batch_size: int,
               shuffle: bool = True,
+              start_epoch = 1,
               plugins: Optional[List[TrainingPlugin]] = None,
               verbose: bool = True)\
             -> None:
         """
         Train the model up to the epochs given.
         There is no return value. Plugins are used to save model and record performances.
+        :param verbose:
+        :param start_epoch:
         :param epochs: number of epochs
         :param batch_size: batch size for training
         :param shuffle: whether or not to shuffle the training data
@@ -161,11 +168,17 @@ class NNClassifier(Classifier):
         :return: None
         """
         if verbose:
-            pass
-
+            s = ''
+            s += "Model Summary:\n"
+            s += repr(self.network) + '\n'
+            s += f"Device used for training: {self.device}\n"
+            s += f"Size of training set: {len(self.training_l)}\n"
+            s += f"Size of validation set: {len(self.validation)}\n"
+            self.training_message = s
+            print(s)
         train_loader = DataLoader(self.training_l, batch_size=batch_size, shuffle=shuffle)
         # the following code adopted from the tutorial notebook
-        for epoch in range(1, epochs+1):  # loop over the dataset multiple times
+        for epoch in range(start_epoch, start_epoch + epochs):  # loop over the dataset multiple times
             for i, data in enumerate(train_loader, 0):
                 # get the inputs; data is a list of [inputs, labels]
                 inputs, labels = data[0].to(self.device), data[1].to(self.device)
@@ -181,22 +194,50 @@ class NNClassifier(Classifier):
                 loss = self.loss(outputs, labels)
                 loss.backward()
                 self.optim.step()
+            if verbose:
+                s = f"---{epoch} EPOCHS FINISHED---\n"
+                self.training_message += s
+                print(s, end='')
             if plugins:
+                s = f"Plugin messages for epoch {epoch}:\n"
+                self.training_message += s
+                print(s, end='')
                 for plugin in plugins:
                     plugin(self, epoch)
+                self.training_message = '' # reset training message
         if verbose:
-            pass
+            s = f"Finished training all {epochs} epochs."
+            self.training_message = s
+            print(s)
         return
 
-    def train_performance(self, metric: Metric, batch_size=300):
-        loader = DataLoader(self.training_l, batch_size=batch_size, shuffle=False)
+    def train_performance(self, metric: Metric, proportion: float = 0.2, batch_size=300):
+        """
+        Obtain the performance on a subset of the training set
+        :param metric: the metric of performance
+        :param proportion: the proportion of the subset to be checked
+        :param batch_size: size of the batch of each prediction (for solving the GPU out-of-memory problem)
+        :return:
+        """
+        loader = DataLoader(self.training_l, batch_size=batch_size, shuffle=True)
         pred = Tensor([]).to(self.device)
+        true = Tensor([]).to(self.device)
+        portion_to_check = int(proportion * len(self.training_l))
         for i, data in enumerate(loader, 0):
+            if i * batch_size >= portion_to_check:
+                break
             x = data[0].to(self.device)
             pred = torch.cat((pred, self._predict(x)), dim=0)
-        return metric(pred, self.training_l.y.to(self.device))
+            true = torch.cat((true, data[1].to(self.device)), dim=0)
+        return metric(pred, true)
 
     def val_performance(self, metric: Metric, batch_size=300):
+        """
+        Obtain the performance on a subset of the training set
+        :param metric: the metric of performance
+        :param batch_size: size of the batch of each prediction (for solving the GPU out-of-memory problem)
+        :return:
+        """
         loader = DataLoader(self.validation, batch_size=batch_size, shuffle=False)
         pred = Tensor([]).to(self.device)
         for i, data in enumerate(loader, 0):

@@ -46,29 +46,25 @@ class ToyClassifier(NNClassifier):
         self.loss = CrossEntropyLoss()
 
     def _predict(self, x: Tensor):
+        return self._argmax_prediction(x)
+
+    def _argmax_prediction(self, x: Tensor):
         """
-        COPIED FROM ING TIAN
-        !!!!!!!!!!!!!!!!!!!! TO BE REIMPLEMENTED !!!!!!!!!!!!!!!!!!!!!!!!!!!
-        :param x:
-        :return:
+            argmax prediction - use the highest value as prediction
+            :param x:
+            :return:
         """
-        number_of_instances = len(x)
         self.network.eval()
         with torch.no_grad():
-            output = self.network(x[:, None, :].float())
+            pred = self.network(x[:, None, :].float())
         self.network.train()
-        number_predicts = output[:, :10]
-        alphabet_predicts = output[:, 10:]
 
-        number_predicts_mask = torch.zeros((number_of_instances, 10), dtype=torch.bool)
-        alphabet_predicts_mask = torch.zeros((number_of_instances, 26), dtype=torch.bool)
-        max_number_indices = torch.argmax(number_predicts, dim=1)
-        max_alphabet_indices = torch.argmax(alphabet_predicts, dim=1)
-        number_predicts_mask[range(number_of_instances), max_number_indices] = True
-        alphabet_predicts_mask[range(number_of_instances), max_alphabet_indices] = True
-
-        number_predicts[number_predicts_mask] = 1
-        number_predicts[~number_predicts_mask] = 0
-        alphabet_predicts[alphabet_predicts_mask] = 1
-        alphabet_predicts[~alphabet_predicts_mask] = 0
+        data_size = len(x)
+        output = torch.zeros((data_size, 36), dtype=torch.int, device=self.device)
+        numbers = pred[:, :10]
+        letters = pred[:, 10:]
+        num_pred = torch.argmax(numbers, dim=1)
+        letter_pred = torch.argmax(letters, dim=1) + 10
+        output[range(data_size), num_pred] = 1
+        output[range(data_size), letter_pred] = 1
         return output

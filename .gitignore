@@ -5,4 +5,4 @@ __pycache__
 test.py
 /_MACOSX
 *.pkl
-/trained_models
+*.params

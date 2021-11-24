@@ -1,0 +1,36 @@
+Model Summary:
+ToyNet(
+  (conv): Sequential(
+    (0): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): ReLU()
+    (3): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (5): ReLU()
+  )
+  (dense): Sequential(
+    (0): Linear(in_features=3136, out_features=256, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=256, out_features=256, bias=True)
+    (3): ReLU()
+    (4): Linear(in_features=256, out_features=36, bias=True)
+  )
+)
+Device used for training: cuda:0
+Size of training set: 27000
+Size of validation set: 3000
+---1 EPOCHS FINISHED---
+Plugin messages for epoch 1:
+TRAIN: 0.007185185185185185	VAL: 0.006
+---2 EPOCHS FINISHED---
+Plugin messages for epoch 2:
+TRAIN: 0.008037037037037037	VAL: 0.005333333333333333
+---3 EPOCHS FINISHED---
+Plugin messages for epoch 3:
+TRAIN: 0.017037037037037038	VAL: 0.007333333333333333
+---4 EPOCHS FINISHED---
+Plugin messages for epoch 4:
+TRAIN: 0.028888888888888888	VAL: 0.012
+---5 EPOCHS FINISHED---
+Plugin messages for epoch 5:
+TRAIN: 0.046481481481481485	VAL: 0.007333333333333333
