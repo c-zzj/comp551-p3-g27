@@ -174,6 +174,9 @@ def plot_train_val_performance(folder_path: Path,
             plt.legend()
             if save:
                 plt.savefig(folder_path / f'{epoch} epochs.jpg')
+                # delete previous plot
+                if Path((folder_path / f'{epoch-step} epochs.jpg')).exists():
+                    Path.unlink(Path((folder_path / f'{epoch-step} epochs.jpg')))
             if show:
                 plt.show()
     return plugin
