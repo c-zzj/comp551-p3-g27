@@ -1,6 +1,7 @@
 from classifier import *
 
-class AlexNet(Network):
+
+class AlexNet(Module):
     def __init__(self):
         super(AlexNet, self).__init__()
         self.net = nn.Sequential(
@@ -35,7 +36,7 @@ class AlexNet(Network):
             nn.BatchNorm2d(64),
             nn.MaxPool2d(2),
 
-            Network.flatten(),
+            Function.Flatten(),
 
             nn.Dropout(0.5),
             nn.Linear(64 * 7 * 7, 1024),
@@ -56,7 +57,6 @@ class AlexNet(Network):
 
 class AlexNetClassifier(NNClassifier):
     def __init__(self,
-                 network: Callable[[], Network],
                  training_l: LabeledDataset,
                  training_ul: Optional[UnlabeledDataset] = None,
                  val_proportion: int = 0.1,):
@@ -70,4 +70,5 @@ class AlexNetClassifier(NNClassifier):
         super(AlexNetClassifier, self).__init__(AlexNet, training_l, training_ul, val_proportion)
         self.optim = SGD(self.network.parameters(), lr=1e-3, momentum=0.99)
         self.loss = CrossEntropyLoss()
+
 
