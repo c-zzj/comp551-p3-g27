@@ -3,6 +3,7 @@ import torch
 from torch import Tensor
 from typing import List, Tuple, Callable, Dict, Any, Union, Optional, Iterable
 from torch.utils.data import Dataset
+from pathlib import Path
 
 TRAINING_X = "images_l.pkl"
 TRAINING_Y = "labels_l.pkl"
@@ -38,11 +39,11 @@ class LabeledDataset(Dataset):
         start = 0
         for i, index in enumerate(splits):
             p.append(LabeledDataset(
-                self.x[start:i],
-                self.y[start:i],
+                self.x[start:index],
+                self.y[start:index],
                 self.name + f'- {i}-th partition'
             ))
-            start = i
+            start = index
         p.append(LabeledDataset(
             self.x[start:],
             self.y[start:],
@@ -52,7 +53,7 @@ class LabeledDataset(Dataset):
 
 
 class UnlabeledDataset(Dataset):
-    def __init__(self, x: Tensor, name: Optional[str] = None):
+    def __init__(self, x: Tensor, name: Optional[str] = "Unlabeled dataset"):
         self.x = x
         self.name = name
 
@@ -87,38 +88,38 @@ class UnlabeledDataset(Dataset):
         return p
 
 
-def read_train_labeled(folder_path: str) -> LabeledDataset:
+def read_train_labeled(folder_path: Path) -> LabeledDataset:
     """
     read the labeled training set
     :param folder_path: path of the dataset folder
     :return: features, labels
     """
-    with open(folder_path + '/' + TRAINING_X, 'rb') as f:
-        x = pickle.load(f)
-    with open(folder_path + '/' + TRAINING_Y, 'rb') as f:
-        y = pickle.load(f)
+    with open(str(folder_path / TRAINING_X), 'rb') as f:
+        x = torch.from_numpy(pickle.load(f))
+    with open(str(folder_path / TRAINING_Y), 'rb') as f:
+        y = torch.from_numpy(pickle.load(f))
     return LabeledDataset(x, y)
 
 
-def read_train_unlabeled(folder_path: str) -> UnlabeledDataset:
+def read_train_unlabeled(folder_path: Path) -> UnlabeledDataset:
     """
     read the unlabeled training set
     :param folder_path: path of the dataset folder
     :return: features
     """
-    with open(folder_path + '/' + TRAINING_UL, 'rb') as f:
-        x = pickle.load(f)
-    return UnlabeledDataset(x)
+    with open(str(folder_path / TRAINING_UL), 'rb') as f:
+        x = torch.from_numpy(pickle.load(f))
+    return UnlabeledDataset(x, "Unlabeled Training")
 
 
-def read_test(folder_path: str) -> UnlabeledDataset:
+def read_test(folder_path: Path) -> UnlabeledDataset:
     """
     read the test set
     :param folder_path: path of the dataset folder
     :return: features
     """
-    with open(folder_path + '/' + TEST, 'rb') as f:
-        x = pickle.load(f)
-    return UnlabeledDataset(x)
+    with open(str(folder_path / TEST), 'rb') as f:
+        x = torch.from_numpy(pickle.load(f))
+    return UnlabeledDataset(x, "Test")
 
 
