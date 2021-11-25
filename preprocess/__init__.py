@@ -6,7 +6,7 @@ PreprocessPipeline = List[Preprocess]
 
 def process_data(dataset: Union[LabeledDataset, UnlabeledDataset],
                  pipeline: PreprocessPipeline,
-                 params: List[Dict[str, Any]]= [{}]) -> Dataset:
+                 params: List[Dict[str, Any]]= []) -> Dataset:
     """
 
     :param dataset:
@@ -14,9 +14,10 @@ def process_data(dataset: Union[LabeledDataset, UnlabeledDataset],
     :param params:
     :return:
     """
-    if len(pipeline) != len(params):
+    if len(pipeline) != len(params) and len(params) != 0:
         raise IndexError("Lengths of the pipeline and corresponding parameters must match")
     for i in range(len(pipeline)):
-        dataset = pipeline[i](dataset, **params[i])
+        if len(params) != 0:
+            dataset = pipeline[i](dataset, **params[i])
     return dataset
 
