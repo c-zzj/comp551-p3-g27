@@ -8,7 +8,7 @@ import torch
 from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import cv2
 
 class Function:
     @staticmethod
@@ -109,8 +109,9 @@ class Classifier:
             folder_path.mkdir(parents=True)
 
         for i in indices:
-            entry = self.validation.y[i]
+            entry = self.validation.x[i].numpy()
             torch.save(entry, Path(folder_path / f"{i}-wrong.jpg"))
+            cv2.imwrite(str(Path(folder_path / f"{i}-wrong.jpg")), entry)
 
 
 class OptimizerProfile:

@@ -12,7 +12,9 @@ DATASET_PATH = Path("../dataset")
 SUBMISSION_PATH = Path("submissions")
 TRAINED_MODELS_PATH = Path("trained_models")
 PROCESSED_DATA_PATH = Path("processed_data")
+WRONG_PRED_ENTRIES_PATH = Path("wrong_pred_entries")
 
+trained_alex_net_on_augmented_WRONG_PRED_PATH = Path(WRONG_PRED_ENTRIES_PATH / "trained_alex_net_on_augmented")
 trained_alex_net_PATH = Path(TRAINED_MODELS_PATH / "alex_net")
 trained_toy_net_PATH = Path(TRAINED_MODELS_PATH / "toy_net")
 trained_alex_net_on_augmented_PATH = Path(TRAINED_MODELS_PATH / "alex_net_rotation_augmented")
@@ -96,5 +98,10 @@ def load_and_test_NN(clf: Callable[..., NNClassifier], epochs: int, submission_n
 
 if __name__ == '__main__':
     #load_and_test_NN(AlexNetClassifier, 25, 3, DATASET_PATH, trained_alex_net_PATH)
-    run_alex_on_augmented()
+    #run_alex_on_augmented()
     #toy_demo()
+    training_set = torch.load(rotation_augmented_data_PATH)
+    alex = AlexNetClassifier(training_set, val_proportion=0.025)
+    alex.load_network(trained_alex_net_on_augmented_PATH, 10)
+    #print(alex.val_performance(accuracy))
+    alex.extract_wrong_pred_entries(trained_alex_net_on_augmented_WRONG_PRED_PATH)

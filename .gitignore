@@ -7,3 +7,4 @@ test.py
 *.pkl
 *.params
 *.data
+*-wrong.jpg
