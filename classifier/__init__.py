@@ -98,7 +98,7 @@ class OptimizerProfile:
         self.params = parameters
 
 
-TrainingPlugin = Callable[[Any, int, Any], None]
+TrainingPlugin = Callable[[Any, int], None]
 Metric = Callable[[Tensor, Tensor], float] # pred, true -> result. The higher the better
 
 

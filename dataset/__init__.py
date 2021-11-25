@@ -27,28 +27,6 @@ class LabeledDataset(Dataset):
         return f"---Dataset name: {self.name}---" \
                 f"Number of entries: {len(self.x)}---"
 
-    def partition(self, splits: List[int]) -> List[Dataset]:
-        """
-        partition the dataset given the indices
-        :param splits: list of indices i_1, ..., i_n. i_n must be strictly smaller than len(self)
-        :return: Partitioned subsets, e.g., the first set contains x_0,...,x_{i_1-1} for x
-        """
-        p = []
-        start = 0
-        for i, index in enumerate(splits):
-            p.append(LabeledDataset(
-                self.x[start:index],
-                self.y[start:index],
-                self.name + f'- {i}-th partition'
-            ))
-            start = index
-        p.append(LabeledDataset(
-            self.x[start:],
-            self.y[start:],
-            self.name + f'- last partition'
-        ))
-        return p
-
 
 class UnlabeledDataset(Dataset):
     def __init__(self, x: Tensor, name: Optional[str] = "Unlabeled dataset"):
@@ -65,23 +43,43 @@ class UnlabeledDataset(Dataset):
         return f"---Dataset name: {self.name}---" \
                f"Number of entries: {len(self.x)}---"
 
-    def partition(self, splits: List[int]) -> List[Dataset]:
-        """
-        partition the dataset given the indices
-        :param splits: list of indices i_1, ..., i_n. i_n must be strictly smaller than len(self)
-        :return: Partitioned subsets, e.g., the first set contains x_0,...,x_{i_1-1} for x
-        """
+
+def partition(data: Union[LabeledDataset, UnlabeledDataset], splits: List[int]) \
+    -> List[Union[LabeledDataset, UnlabeledDataset]]:
+    """
+    partition the dataset given the indices
+    :param data:
+    :param splits: list of indices i_1, ..., i_n. i_n must be strictly smaller than len(self)
+    :return: Partitioned subsets, e.g., the first set contains x_0,...,x_{i_1-1} for x
+    """
+    if type(data) == LabeledDataset:
+        p = []
+        start = 0
+        for i, index in enumerate(splits):
+            p.append(LabeledDataset(
+                data.x[start:index],
+                data.y[start:index],
+                data.name + f'- {i}-th partition'
+            ))
+            start = index
+        p.append(LabeledDataset(
+            data.x[start:],
+            data.y[start:],
+            data.name + f'- last partition'
+        ))
+        return p
+    else:
         p = []
         start = 0
         for i, index in enumerate(splits):
             p.append(UnlabeledDataset(
-                self.x[start:i],
-                self.name + f'- {i}-th partition'
+                data.x[start:i],
+                data.name + f'- {i}-th partition'
             ))
             start = i
         p.append(UnlabeledDataset(
-            self.x[start:],
-            self.name + f'- last partition'
+            data.x[start:],
+            data.name + f'- last partition'
         ))
         return p
 
