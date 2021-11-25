@@ -108,10 +108,19 @@ class Classifier:
         if not folder_path.exists():
             folder_path.mkdir(parents=True)
 
-        for i in indices:
-            entry = self.validation.x[i].numpy()
-            torch.save(entry, Path(folder_path / f"{i}-wrong.jpg"))
-            cv2.imwrite(str(Path(folder_path / f"{i}-wrong.jpg")), entry)
+        with open(str(folder_path / 'post-mortem.txt'), 'w+') as f:
+            for i in indices:
+                correct_num, correct_letter = torch.nonzero(true[i][:10])[0, 0], torch.nonzero(true[i][10:])[0, 0]
+                predicted_num, predicted_letter = torch.nonzero(pred[i][:10])[0, 0], torch.nonzero(pred[i][10:])[0, 0]
+                correct_letter, predicted_letter = chr(ord('a') + correct_letter), chr(ord('a') + predicted_letter)
+                f.write(f'---{i}-th image---\n')
+                f.write(f'correct: {correct_num}{correct_letter}\tpredicted: {predicted_num}{predicted_letter}\n')
+                f.write(f'--------------------------\n')
+                entry = self.validation.x[i].numpy()
+                torch.save(entry, Path(folder_path / f"{i}-wrong.jpg"))
+                cv2.imwrite(str(Path(folder_path / f"{i}-wrong.jpg")), entry)
+
+
 
 
 class OptimizerProfile:

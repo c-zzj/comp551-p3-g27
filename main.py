@@ -103,5 +103,6 @@ if __name__ == '__main__':
     training_set = torch.load(rotation_augmented_data_PATH)
     alex = AlexNetClassifier(training_set, val_proportion=0.025)
     alex.load_network(trained_alex_net_on_augmented_PATH, 10)
-    #print(alex.val_performance(accuracy))
+    print(alex.val_performance(accuracy))
     alex.extract_wrong_pred_entries(trained_alex_net_on_augmented_WRONG_PRED_PATH)
+    #load_and_test_NN(AlexNetClassifier, 10, 4, DATASET_PATH, trained_alex_net_on_augmented_PATH)
