@@ -32,13 +32,13 @@ class Classifier:
     def __init__(self,
                  training_l: LabeledDataset,
                  training_ul: Optional[UnlabeledDataset] = None,
-                 val_proportion: int = 0.1,):
+                 val_proportion: float = 0.1,):
         self.device = device('cuda:0' if torch.cuda.is_available() else 'cpu')
         self.training_ul = training_ul
         self.val_proportion = val_proportion
-        partition = training_l.partition([int(val_proportion * len(training_l))])
-        self.validation = partition[0]
-        self.training_l = partition[1]
+        p = partition(training_l, [int(val_proportion * len(training_l))])
+        self.validation = p[0]
+        self.training_l = p[1]
 
     def train_performance(self, metric):
         """
@@ -144,9 +144,9 @@ class NNClassifier(Classifier):
         self.loss = loss
 
     def reset_train_val(self, training_l: LabeledDataset, val_proportion: int):
-        partition = training_l.partition([int(val_proportion * len(training_l))])
-        self.validation = partition[0]
-        self.training_l = partition[1]
+        p = partition(training_l, [int(val_proportion * len(training_l))])
+        self.validation = p[0]
+        self.training_l = p[1]
 
     def train(self,
               epochs: int,

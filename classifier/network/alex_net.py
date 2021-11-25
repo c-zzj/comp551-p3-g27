@@ -60,7 +60,7 @@ class AlexNetClassifier(NNClassifier):
     def __init__(self,
                  training_l: LabeledDataset,
                  training_ul: Optional[UnlabeledDataset] = None,
-                 val_proportion: int = 0.1,):
+                 val_proportion: float = 0.1,):
         """
         :param training_l: the labeled dataset
         :param val_proportion: proportion of validation set
