@@ -6,3 +6,4 @@ test.py
 /_MACOSX
 *.pkl
 *.params
+*.data
