@@ -90,6 +90,28 @@ class Classifier:
         result.to_csv(folder_path / (str(submission_number) + '.csv'), index=False)
         return
 
+    def extract_wrong_pred_entries(self, folder_path: Path, batch_size: int = 300):
+        """
+
+        :param folder_path:
+        :param batch_size:
+        :return:
+        """
+        loader = DataLoader(self.validation, batch_size=batch_size, shuffle=False)
+        pred = Tensor([]).to(self.device)
+        for i, data in enumerate(loader, 0):
+            x = data[0].to(self.device)
+            pred = torch.cat((pred, self._predict(x)), dim=0)
+        true = self.validation.y.to(self.device)
+        indices = torch.nonzero(torch.any(pred != true, dim=1))[:,0]
+
+        if not folder_path.exists():
+            folder_path.mkdir(parents=True)
+
+        for i in indices:
+            entry = self.validation.y[i]
+            torch.save(entry, Path(folder_path / f"{i}-wrong.jpg"))
+
 
 class OptimizerProfile:
     def __init__(self, optimizer: Callable[..., Optimizer],
@@ -211,7 +233,7 @@ class NNClassifier(Classifier):
             print(s)
         return
 
-    def train_performance(self, metric: Metric, proportion: float = 0.2, batch_size=300):
+    def train_performance(self, metric: Metric, proportion: float = 0.025, batch_size=300):
         """
         Obtain the performance on a subset of the training set
         :param metric: the metric of performance

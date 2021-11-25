@@ -1,9 +1,10 @@
 import pickle
 import torch
-from torch import Tensor
+from torch import Tensor, device
 from typing import List, Tuple, Callable, Dict, Any, Union, Optional, Iterable
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 from pathlib import Path
+from torch import randperm
 
 TRAINING_X = "images_l.pkl"
 TRAINING_Y = "labels_l.pkl"
@@ -44,10 +45,11 @@ class UnlabeledDataset(Dataset):
                f"Number of entries: {len(self.x)}---"
 
 
-def partition(data: Union[LabeledDataset, UnlabeledDataset], splits: List[int]) \
+def partition(data: Union[LabeledDataset, UnlabeledDataset], splits: List[int], shuffle=True) \
     -> List[Union[LabeledDataset, UnlabeledDataset]]:
     """
     partition the dataset given the indices
+    :param shuffle:
     :param data:
     :param splits: list of indices i_1, ..., i_n. i_n must be strictly smaller than len(self)
     :return: Partitioned subsets, e.g., the first set contains x_0,...,x_{i_1-1} for x
@@ -55,10 +57,16 @@ def partition(data: Union[LabeledDataset, UnlabeledDataset], splits: List[int]) 
     if type(data) == LabeledDataset:
         p = []
         start = 0
+        x = data.x
+        y = data.y
+        if shuffle:
+            indices = randperm(len(data))
+            x = x[indices]
+            y = y[indices]
         for i, index in enumerate(splits):
             p.append(LabeledDataset(
-                data.x[start:index],
-                data.y[start:index],
+                x[start:index],
+                y[start:index],
                 data.name + f'- {i}-th partition'
             ))
             start = index
@@ -71,9 +79,13 @@ def partition(data: Union[LabeledDataset, UnlabeledDataset], splits: List[int]) 
     else:
         p = []
         start = 0
+        x = data.x
+        if shuffle:
+            indices = randperm(len(data))
+            x = x[indices]
         for i, index in enumerate(splits):
             p.append(UnlabeledDataset(
-                data.x[start:i],
+                x[start:i],
                 data.name + f'- {i}-th partition'
             ))
             start = i

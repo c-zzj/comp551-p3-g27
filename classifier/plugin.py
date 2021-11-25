@@ -1,4 +1,5 @@
 from classifier import *
+from timeit import default_timer as timer
 
 
 def save_model(folder_path: Path, step: int = 1) -> TrainingPlugin:
@@ -25,13 +26,35 @@ def save_training_message(folder_path: Path, step: int = 1, empty_previous: bool
     """
     if not folder_path.exists():
         folder_path.mkdir(parents=True)
-        if empty_previous and Path(folder_path / 'log.txt').exists():
-            Path.unlink(folder_path / 'log.txt')
 
     def plugin(clf: NNClassifier, epoch: int) -> None:
         if epoch % step == 0:
             with open(str(folder_path / 'log.txt'), 'a+') as f:
                 f.write(clf.training_message)
+    return plugin
+
+
+def elapsed_time(print_to_console: bool = True, log: bool = True, step: int = 1) -> TrainingPlugin:
+    """
+
+    :param print_to_console:
+    :param log:
+    :param step:
+    :return:
+    """
+    start_time = timer()
+
+    def plugin(clf: NNClassifier, epoch: int) -> None:
+        if epoch % step == 0:
+            if 'time' in clf._tmp:
+                s = f"time elapsed: {timer() - clf._tmp['time']} sec\n"
+            else:
+                s = f"time elapsed: {timer() - start_time} sec\n"
+            if print_to_console:
+                print(s, end='')
+            if log:
+                clf.training_message += s
+            clf._tmp['time'] = timer()
     return plugin
 
 
