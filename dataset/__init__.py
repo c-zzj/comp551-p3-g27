@@ -71,8 +71,8 @@ def partition(data: Union[LabeledDataset, UnlabeledDataset], splits: List[int], 
             ))
             start = index
         p.append(LabeledDataset(
-            data.x[start:],
-            data.y[start:],
+            x[start:],
+            y[start:],
             data.name + f'- last partition'
         ))
         return p
@@ -90,7 +90,7 @@ def partition(data: Union[LabeledDataset, UnlabeledDataset], splits: List[int], 
             ))
             start = i
         p.append(UnlabeledDataset(
-            data.x[start:],
+            x[start:],
             data.name + f'- last partition'
         ))
         return p

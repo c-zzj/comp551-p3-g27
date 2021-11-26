@@ -1,6 +1,6 @@
 from dataset import *
 import torch.nn as nn
-from torch.nn import Module, CrossEntropyLoss
+from torch.nn import Module, CrossEntropyLoss, functional
 from torch.optim import SGD, Optimizer, Adam
 from torch.utils.data import DataLoader
 from torch import device, Tensor
@@ -9,6 +9,7 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import cv2
+
 
 class Function:
     @staticmethod
@@ -31,14 +32,13 @@ class Classifier:
     """
     def __init__(self,
                  training_l: LabeledDataset,
+                 validation: LabeledDataset,
                  training_ul: Optional[UnlabeledDataset] = None,
-                 val_proportion: float = 0.1,):
+                 ):
         self.device = device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        self.training_l = training_l
+        self.validation = validation
         self.training_ul = training_ul
-        self.val_proportion = val_proportion
-        p = partition(training_l, [int(val_proportion * len(training_l))])
-        self.validation = p[0]
-        self.training_l = p[1]
 
     def train_performance(self, metric):
         """
@@ -92,7 +92,7 @@ class Classifier:
 
     def extract_wrong_pred_entries(self, folder_path: Path, batch_size: int = 300):
         """
-
+        save wrongly labeled entries and a post-mortem summary to the folder
         :param folder_path:
         :param batch_size:
         :return:
@@ -121,8 +121,6 @@ class Classifier:
                 cv2.imwrite(str(Path(folder_path / f"{i}-wrong.jpg")), entry)
 
 
-
-
 class OptimizerProfile:
     def __init__(self, optimizer: Callable[..., Optimizer],
                       parameters: Dict[str, Any] = {}):
@@ -141,16 +139,16 @@ class NNClassifier(Classifier):
     def __init__(self,
                  network: Callable[[], Module],
                  training_l: LabeledDataset,
+                 validation: LabeledDataset,
                  training_ul: Optional[UnlabeledDataset] = None,
-                 val_proportion: int = 0.1,
                  ):
         """
         :param network: a function that gives a Network
         :param training_l: the labeled dataset
-        :param val_proportion: proportion of validation set
+        :param validation: the validation set
         :param training_ul: (optional) the unlabeled dataset
         """
-        super(NNClassifier, self).__init__(training_l, training_ul, val_proportion)
+        super(NNClassifier, self).__init__(training_l, validation, training_ul)
         self.network = network().to(self.device)
         self.optim = SGD(self.network.parameters(), lr=1e-3, momentum=0.99)
         self.loss = CrossEntropyLoss()
@@ -174,11 +172,6 @@ class NNClassifier(Classifier):
 
     def set_loss(self, loss: Callable):
         self.loss = loss
-
-    def reset_train_val(self, training_l: LabeledDataset, val_proportion: int):
-        p = partition(training_l, [int(val_proportion * len(training_l))])
-        self.validation = p[0]
-        self.training_l = p[1]
 
     def train(self,
               epochs: int,
@@ -285,4 +278,24 @@ class NNClassifier(Classifier):
         """
         raise NotImplementedError
 
+    def _original_36_argmax(self, x: Tensor):
+        """
+        argmax prediction - use the highest value as prediction
+        :param x:
+        :return:
+        """
+        self.network.eval()
+        with torch.no_grad():
+            pred = self.network(x[:, None, :].float())
+        self.network.train()
 
+        data_size = len(x)
+        numbers = pred[:, :10]
+        letters = pred[:, 10:]
+        num_pred = torch.argmax(numbers, dim=1)
+        letter_pred = torch.argmax(letters, dim=1) + 10
+
+        output = torch.zeros((data_size, 36), dtype=torch.int, device=self.device)
+        output[range(data_size), num_pred] = 1
+        output[range(data_size), letter_pred] = 1
+        return output

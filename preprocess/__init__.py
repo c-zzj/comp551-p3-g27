@@ -48,5 +48,49 @@ def preprocess_rotate(dataset: LabeledDataset, rotations: List[int], batch_size=
         for i, data in enumerate(loader, 0):
             x, y = data[0].to(d), data[1]
             result_x = torch.cat((result_x, TF.rotate(x, rotation).to('cpu')), dim=0)
-            result_y = torch.cat((result_y, torch.tensor(y)), dim=0)
+            result_y = torch.cat((result_y, y.clone().detach()), dim=0)
     return LabeledDataset(result_x, result_y)
+
+
+def preprocess_rotate_ignore_xt(dataset: LabeledDataset, rotations: List[int], batch_size=1000) -> LabeledDataset:
+    """
+
+    :param dataset:
+    :param rotations:
+    :return:
+    """
+    rotations = list(rotations)
+    if 0 not in rotations:
+        rotations.append(0)
+
+    letter_x = ord('x') - ord('a') + 10
+    letter_t = ord('t') - ord('a') + 10
+    result_x = Tensor([])
+    result_y = Tensor([])
+    no_tx_x = Tensor([])
+    no_tx_y = Tensor([])
+    # add images containing x or t
+    for i in range(len(dataset)):
+        x, y = dataset.x[i][None, :], dataset.y[i][None, :]
+        if y[0, letter_x] == 1 or y[0, letter_t] == 1:
+            x, y = x.clone().detach(), y.clone().detach()
+            for _ in rotations:
+                result_x = torch.cat((result_x, x), dim=0)
+                result_y = torch.cat((result_y, y), dim=0)
+        else:
+            no_tx_x = torch.cat((no_tx_x, x), dim=0)
+            no_tx_y = torch.cat((no_tx_y, y), dim=0)
+
+    # add other images
+    d = device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    loader = DataLoader(LabeledDataset(no_tx_x, no_tx_y), batch_size=batch_size, shuffle=False)
+    for rotation in rotations:
+        for i, data in enumerate(loader, 0):
+            x, y = data[0].clone().detach().to(d), data[1].clone().detach()
+            result_x = torch.cat((result_x, TF.rotate(x, rotation).to('cpu')), dim=0)
+            result_y = torch.cat((result_y, y.clone().detach()), dim=0)
+    indices = randperm(len(result_x))
+    result_x = result_x[indices]
+    result_y = result_y[indices]
+    return LabeledDataset(result_x, result_y)
+

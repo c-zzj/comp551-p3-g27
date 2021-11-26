@@ -1,0 +1,255 @@
+---105-th image---
+correct: 8y	predicted: 8s
+--------------------------
+---147-th image---
+correct: 0f	predicted: 0t
+--------------------------
+---165-th image---
+correct: 0g	predicted: 9d
+--------------------------
+---194-th image---
+correct: 6t	predicted: 6x
+--------------------------
+---216-th image---
+correct: 8t	predicted: 8x
+--------------------------
+---326-th image---
+correct: 7z	predicted: 3i
+--------------------------
+---365-th image---
+correct: 8h	predicted: 8v
+--------------------------
+---394-th image---
+correct: 5t	predicted: 5x
+--------------------------
+---399-th image---
+correct: 6z	predicted: 1g
+--------------------------
+---407-th image---
+correct: 0a	predicted: 0q
+--------------------------
+---459-th image---
+correct: 9t	predicted: 9x
+--------------------------
+---471-th image---
+correct: 5a	predicted: 9s
+--------------------------
+---527-th image---
+correct: 7e	predicted: 7k
+--------------------------
+---559-th image---
+correct: 9s	predicted: 9a
+--------------------------
+---657-th image---
+correct: 5q	predicted: 5v
+--------------------------
+---706-th image---
+correct: 0t	predicted: 0x
+--------------------------
+---726-th image---
+correct: 2y	predicted: 4z
+--------------------------
+---748-th image---
+correct: 8j	predicted: 8u
+--------------------------
+---784-th image---
+correct: 7x	predicted: 1x
+--------------------------
+---798-th image---
+correct: 7f	predicted: 7t
+--------------------------
+---808-th image---
+correct: 1t	predicted: 1x
+--------------------------
+---822-th image---
+correct: 2l	predicted: 1z
+--------------------------
+---888-th image---
+correct: 7t	predicted: 7x
+--------------------------
+---975-th image---
+correct: 0g	predicted: 0d
+--------------------------
+---1223-th image---
+correct: 5m	predicted: 6m
+--------------------------
+---1239-th image---
+correct: 8n	predicted: 7g
+--------------------------
+---1242-th image---
+correct: 5j	predicted: 1s
+--------------------------
+---1267-th image---
+correct: 1x	predicted: 1t
+--------------------------
+---1295-th image---
+correct: 9l	predicted: 9d
+--------------------------
+---1341-th image---
+correct: 6i	predicted: 6b
+--------------------------
+---1371-th image---
+correct: 6g	predicted: 6f
+--------------------------
+---1388-th image---
+correct: 9t	predicted: 9f
+--------------------------
+---1421-th image---
+correct: 1r	predicted: 5v
+--------------------------
+---1428-th image---
+correct: 5q	predicted: 5s
+--------------------------
+---1451-th image---
+correct: 2l	predicted: 1z
+--------------------------
+---1454-th image---
+correct: 4k	predicted: 4e
+--------------------------
+---1469-th image---
+correct: 8g	predicted: 6b
+--------------------------
+---1517-th image---
+correct: 2r	predicted: 2p
+--------------------------
+---1580-th image---
+correct: 9e	predicted: 4e
+--------------------------
+---1588-th image---
+correct: 1a	predicted: 1q
+--------------------------
+---1620-th image---
+correct: 6t	predicted: 6x
+--------------------------
+---1670-th image---
+correct: 4j	predicted: 1u
+--------------------------
+---1746-th image---
+correct: 1z	predicted: 2l
+--------------------------
+---1771-th image---
+correct: 2v	predicted: 2c
+--------------------------
+---1789-th image---
+correct: 8c	predicted: 6c
+--------------------------
+---1799-th image---
+correct: 1h	predicted: 4t
+--------------------------
+---1870-th image---
+correct: 9t	predicted: 9f
+--------------------------
+---1888-th image---
+correct: 1o	predicted: 0i
+--------------------------
+---1901-th image---
+correct: 9r	predicted: 9p
+--------------------------
+---1915-th image---
+correct: 6i	predicted: 5i
+--------------------------
+---1928-th image---
+correct: 1o	predicted: 0y
+--------------------------
+---1939-th image---
+correct: 4q	predicted: 9h
+--------------------------
+---1975-th image---
+correct: 3l	predicted: 3k
+--------------------------
+---1982-th image---
+correct: 8i	predicted: 1c
+--------------------------
+---2016-th image---
+correct: 7b	predicted: 2b
+--------------------------
+---2045-th image---
+correct: 7x	predicted: 7g
+--------------------------
+---2133-th image---
+correct: 4a	predicted: 4q
+--------------------------
+---2157-th image---
+correct: 9a	predicted: 9q
+--------------------------
+---2202-th image---
+correct: 2x	predicted: 2t
+--------------------------
+---2260-th image---
+correct: 0i	predicted: 1o
+--------------------------
+---2276-th image---
+correct: 5l	predicted: 1y
+--------------------------
+---2327-th image---
+correct: 0l	predicted: 6o
+--------------------------
+---2353-th image---
+correct: 8s	predicted: 5l
+--------------------------
+---2413-th image---
+correct: 7x	predicted: 7t
+--------------------------
+---2418-th image---
+correct: 9t	predicted: 9x
+--------------------------
+---2469-th image---
+correct: 3x	predicted: 3t
+--------------------------
+---2473-th image---
+correct: 5a	predicted: 5c
+--------------------------
+---2498-th image---
+correct: 1m	predicted: 1l
+--------------------------
+---2538-th image---
+correct: 4d	predicted: 4l
+--------------------------
+---2548-th image---
+correct: 0g	predicted: 8q
+--------------------------
+---2557-th image---
+correct: 7o	predicted: 7p
+--------------------------
+---2561-th image---
+correct: 3t	predicted: 3x
+--------------------------
+---2590-th image---
+correct: 7x	predicted: 7r
+--------------------------
+---2633-th image---
+correct: 9e	predicted: 7i
+--------------------------
+---2634-th image---
+correct: 0i	predicted: 1o
+--------------------------
+---2649-th image---
+correct: 9t	predicted: 9x
+--------------------------
+---2650-th image---
+correct: 1o	predicted: 0i
+--------------------------
+---2664-th image---
+correct: 7r	predicted: 7p
+--------------------------
+---2679-th image---
+correct: 4f	predicted: 4t
+--------------------------
+---2715-th image---
+correct: 0a	predicted: 0q
+--------------------------
+---2768-th image---
+correct: 8k	predicted: 8l
+--------------------------
+---2804-th image---
+correct: 8y	predicted: 5r
+--------------------------
+---2838-th image---
+correct: 5d	predicted: 0f
+--------------------------
+---2856-th image---
+correct: 1h	predicted: 4t
+--------------------------
+---2963-th image---
+correct: 6s	predicted: 6c
+--------------------------

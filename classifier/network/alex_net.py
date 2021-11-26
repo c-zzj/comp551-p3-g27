@@ -1,31 +1,18 @@
 from classifier import *
 
 
-class AlexNetPlus(Module):
-    def __init__(self):
-        super(AlexNetPlus, self).__init__()
-        self.conv = nn.Sequential(
+class AlexNet(Module):
+    def get_conv(self):
+        return nn.Sequential(
             nn.Conv2d(1, 16, (3, 3), padding='same'),
-            nn.LeakyReLU(),
-            nn.BatchNorm2d(16),
-            nn.Conv2d(16, 16, (3, 3), padding='same'),
             nn.MaxPool2d(2),
             nn.LeakyReLU(),
             nn.BatchNorm2d(16),
             nn.Conv2d(16, 64, (3, 3), padding='same'),
-            nn.LeakyReLU(),
-            nn.BatchNorm2d(64),
-            nn.Conv2d(64, 64, (3, 3), padding='same'),
             nn.MaxPool2d(2),
             nn.LeakyReLU(),
             nn.BatchNorm2d(64),
             nn.Conv2d(64, 256, (3, 3), padding='same'),
-            nn.LeakyReLU(),
-            nn.BatchNorm2d(256),
-            nn.Conv2d(256, 256, (3, 3), padding='same'),
-            nn.LeakyReLU(),
-            nn.BatchNorm2d(256),
-            nn.Conv2d(256, 256, (3, 3), padding='same'),
             nn.LeakyReLU(),
             nn.BatchNorm2d(256),
             nn.Conv2d(256, 256, (3, 3), padding='same'),
@@ -36,27 +23,41 @@ class AlexNetPlus(Module):
             nn.LeakyReLU(),
             nn.BatchNorm2d(64),
         )
-        self.dense = nn.Sequential(
+
+    def get_dense(self):
+        return nn.Sequential(
             nn.Dropout(0.5),
             nn.Linear(64 * 7 * 7, 1024),
             nn.LeakyReLU(),
             nn.BatchNorm1d(1024),
-
             nn.Dropout(0.5),
             nn.Linear(1024, 1024),
             nn.LeakyReLU(),
             nn.BatchNorm1d(1024),
-
-            nn.Linear(1024, 36)
         )
 
+    def __init__(self):
+        super(AlexNet, self).__init__()
+        self.conv1 = self.get_conv()
+        self.dense1 = self.get_dense()
+        self.conv2 = self.get_conv()
+        self.dense2 = self.get_dense()
+        self.last_layer = nn.Linear(2048, 36)
+
     def forward(self, x):
-        x = self.conv(x)
-        x = Function.flatten(x)
-        return self.dense(x)
+        x1 = self.conv1(x)
+        x1 = Function.flatten(x1)
+        x1 = self.dense1(x1)
+
+        x2 = self.conv2(x)
+        x2 = Function.flatten(x2)
+        x2 = self.dense2(x2)
+
+        x = torch.cat((x1, x2), dim=1)
+        return self.last_layer(x)
 
 
-class AlexNetPlusClassifier(NNClassifier):
+class AlexNetClassifier(NNClassifier):
     def __init__(self, training_l: LabeledDataset, validation: LabeledDataset,
                  training_ul: Optional[UnlabeledDataset] = None):
         """
@@ -64,7 +65,7 @@ class AlexNetPlusClassifier(NNClassifier):
         :param validation: the validation set
         :param training_ul: (optional) the unlabeled dataset
         """
-        super(AlexNetPlusClassifier, self).__init__(AlexNetPlus, training_l, validation, training_ul)
+        super(AlexNetClassifier, self).__init__(AlexNet, training_l, validation, training_ul)
         self.optim = SGD(self.network.parameters(), lr=1e-3, momentum=0.99)
         self.loss = CrossEntropyLoss()
 
