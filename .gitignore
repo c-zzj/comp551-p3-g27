@@ -8,3 +8,4 @@ test.py
 *.params
 *.data
 *-wrong.jpg
+alex_net_plus.py

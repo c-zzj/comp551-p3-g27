@@ -11,6 +11,10 @@ import matplotlib.pyplot as plt
 import cv2
 
 
+TrainingPlugin = Callable[[Any, int], None]
+Metric = Callable[[Tensor, Tensor], float] # pred, true -> result. The higher the better
+
+
 class Function:
     @staticmethod
     def flatten(x: Tensor):
@@ -25,6 +29,66 @@ class Function:
             num_features *= s
         return x.view(-1, num_features)
 
+    @staticmethod
+    def label_to_36(y: Tensor, device: device):
+        """
+        convert probabilities y from 260 labels to original 26 labels. If input in 36 labels, return it as is
+        :param y:
+        :param device:
+        :return:
+        """
+        if y.size()[1] == 36:
+            return y
+        output = torch.zeros((len(y), 36), dtype=torch.float, device=device)
+        for number in range(10):
+            prob = torch.zeros(len(y), 10, dtype=torch.float, device=device)
+            for letter in range(26):
+                prob += y[range(len(y)), letter * 10 + number]
+            output[:, number] = prob
+
+        for letter in range(26):
+            prob = torch.zeros(len(y), 10, dtype=torch.float, device=device)
+            for number in range(10):
+                prob += y[range(len(y)), letter * 10 + number]
+            output[:, letter + 10] = prob
+        return output
+
+    @staticmethod
+    def label_to_36_argmax(y: Tensor, device: device):
+        """
+
+        :param y:
+        :param device:
+        :return:
+        """
+        if y.size()[1] == 36:
+            return y
+        data_size = len(y)
+        index = torch.argmax(y, dim=1)
+        num = index % 10
+        letter = torch.div(index, Tensor([10]).to(device), rounding_mode='floor') + 10
+        output = torch.zeros((data_size, 36), dtype=torch.int, device=device)
+        output[range(data_size), num.to(torch.long)] = 1
+        output[range(data_size), letter.to(torch.long)] = 1
+        return output
+
+    @staticmethod
+    def label_to_260(y: Tensor, device: device):
+        """
+
+        :param y:
+        :param device:
+        :return:
+        """
+        if y.size()[1] == 260:
+            return y
+        numbers = torch.softmax(y[:,:10], dim=1)
+        letters = torch.softmax(y[:,10:], dim=1)
+        output = torch.zeros((len(y), 260), dtype=torch.float, device=device)
+        for num in range(10):
+            for letter in range(26):
+                output[range(len(y)),  letter * 10 + num] = numbers[range(len(y)), num] * letters[range(len(y)), letter]
+        return output
 
 class Classifier:
     """
@@ -40,23 +104,41 @@ class Classifier:
         self.validation = validation
         self.training_ul = training_ul
 
-    def train_performance(self, metric):
+    def train_performance(self, metric: Metric, proportion: float = 0.025, batch_size=300):
         """
-        to be implemented by concrete classifiers
-        :param metric:
+        Obtain the performance on a subset of the training set
+        :param metric: the metric of performance
+        :param proportion: the proportion of the subset to be checked
+        :param batch_size: size of the batch of each prediction (for solving the GPU out-of-memory problem)
         :return:
         """
-        raise NotImplementedError
+        loader = DataLoader(self.training_l, batch_size=batch_size, shuffle=True)
+        pred = Tensor([]).to(self.device)
+        true = Tensor([]).to(self.device)
+        portion_to_check = int(proportion * len(self.training_l))
+        for i, data in enumerate(loader, 0):
+            if i * batch_size >= portion_to_check:
+                break
+            x = data[0].to(self.device)
+            pred = torch.cat((pred, self.predict(x)), dim=0)
+            true = torch.cat((true, data[1].to(self.device)), dim=0)
+        return metric(pred, true)
 
-    def val_performance(self, metric):
+    def val_performance(self, metric: Metric, batch_size=300):
         """
-        to be implemented by concrete classifiers
-        :param metric:
+        Obtain the performance on a subset of the training set
+        :param metric: the metric of performance
+        :param batch_size: size of the batch of each prediction (for solving the GPU out-of-memory problem)
         :return:
         """
-        raise NotImplementedError
+        loader = DataLoader(self.validation, batch_size=batch_size, shuffle=False)
+        pred = Tensor([]).to(self.device)
+        for i, data in enumerate(loader, 0):
+            x = data[0].to(self.device)
+            pred = torch.cat((pred, self.predict(x)), dim=0)
+        return metric(pred, self.validation.y.to(self.device))
 
-    def _predict(self, x: Tensor):
+    def predict(self, x: Tensor):
         """
         to be implemented by concrete classifiers
         :param x:
@@ -74,7 +156,7 @@ class Classifier:
         pred = Tensor([]).to(self.device)
         for i, x in enumerate(loader, 0):
             x = x.to(self.device)
-            pred = torch.cat((pred, self._predict(x)), dim=0)
+            pred = torch.cat((pred, Function.label_to_36_argmax(self.predict(x), self.device)), dim=0)
 
         # type cast to concatenated string
         pred = pred.detach().to('cpu').numpy().astype(int).astype(bytearray)
@@ -99,10 +181,12 @@ class Classifier:
         """
         loader = DataLoader(self.validation, batch_size=batch_size, shuffle=False)
         pred = Tensor([]).to(self.device)
+        true = Tensor([]).to(self.device)
         for i, data in enumerate(loader, 0):
             x = data[0].to(self.device)
-            pred = torch.cat((pred, self._predict(x)), dim=0)
-        true = self.validation.y.to(self.device)
+            y = data[1].to(self.device)
+            pred = torch.cat((pred, Function.label_to_36_argmax(self.predict(x), device=self.device)), dim=0)
+            true = torch.cat((true, Function.label_to_36_argmax(y,device=self.device)), dim=0)
         indices = torch.nonzero(torch.any(pred != true, dim=1))[:,0]
 
         if not folder_path.exists():
@@ -128,16 +212,12 @@ class OptimizerProfile:
         self.params = parameters
 
 
-TrainingPlugin = Callable[[Any, int], None]
-Metric = Callable[[Tensor, Tensor], float] # pred, true -> result. The higher the better
-
-
 class NNClassifier(Classifier):
     """
     Abstract Network Classifier
     """
     def __init__(self,
-                 network: Callable[[], Module],
+                 network: Module,
                  training_l: LabeledDataset,
                  validation: LabeledDataset,
                  training_ul: Optional[UnlabeledDataset] = None,
@@ -149,7 +229,7 @@ class NNClassifier(Classifier):
         :param training_ul: (optional) the unlabeled dataset
         """
         super(NNClassifier, self).__init__(training_l, validation, training_ul)
-        self.network = network().to(self.device)
+        self.network = network.to(self.device)
         self.optim = SGD(self.network.parameters(), lr=1e-3, momentum=0.99)
         self.loss = CrossEntropyLoss()
         self.training_message = 'No training message.'
@@ -236,41 +316,70 @@ class NNClassifier(Classifier):
             print(s)
         return
 
-    def train_performance(self, metric: Metric, proportion: float = 0.025, batch_size=300):
+    def train_EM(self,
+              epochs: int,
+              batch_size: int,
+              shuffle: bool = True,
+              start_epoch = 1,
+              plugins: Optional[List[TrainingPlugin]] = None,
+              verbose: bool = True)\
+            -> None:
         """
-        Obtain the performance on a subset of the training set
-        :param metric: the metric of performance
-        :param proportion: the proportion of the subset to be checked
-        :param batch_size: size of the batch of each prediction (for solving the GPU out-of-memory problem)
-        :return:
+        Train the model up to the epochs given.
+        There is no return value. Plugins are used to save model and record performances.
+        :param verbose:
+        :param start_epoch:
+        :param epochs: number of epochs
+        :param batch_size: batch size for training
+        :param shuffle: whether or not to shuffle the training data
+        :param plugins: training plugin that is run after each epoch
+        :return: None
         """
-        loader = DataLoader(self.training_l, batch_size=batch_size, shuffle=True)
-        pred = Tensor([]).to(self.device)
-        true = Tensor([]).to(self.device)
-        portion_to_check = int(proportion * len(self.training_l))
-        for i, data in enumerate(loader, 0):
-            if i * batch_size >= portion_to_check:
-                break
-            x = data[0].to(self.device)
-            pred = torch.cat((pred, self._predict(x)), dim=0)
-            true = torch.cat((true, data[1].to(self.device)), dim=0)
-        return metric(pred, true)
+        if verbose:
+            s = ''
+            s += "Model Summary:\n"
+            s += repr(self.network) + '\n'
+            s += f"Device used for training: {self.device}\n"
+            s += f"Size of training set: {len(self.training_l)}\n"
+            s += f"Size of validation set: {len(self.validation)}\n"
+            self.training_message = s
+            print(s)
+        train_loader = DataLoader(self.training_l, batch_size=batch_size, shuffle=shuffle)
+        # the following code adopted from the tutorial notebook
+        for epoch in range(start_epoch, start_epoch + epochs):  # loop over the dataset multiple times
+            for i, data in enumerate(train_loader, 0):
+                # get the inputs; data is a list of [inputs, labels]
+                inputs, labels = data[0].to(self.device), data[1].to(self.device)
 
-    def val_performance(self, metric: Metric, batch_size=300):
-        """
-        Obtain the performance on a subset of the training set
-        :param metric: the metric of performance
-        :param batch_size: size of the batch of each prediction (for solving the GPU out-of-memory problem)
-        :return:
-        """
-        loader = DataLoader(self.validation, batch_size=batch_size, shuffle=False)
-        pred = Tensor([]).to(self.device)
-        for i, data in enumerate(loader, 0):
-            x = data[0].to(self.device)
-            pred = torch.cat((pred, self._predict(x)), dim=0)
-        return metric(pred, self.validation.y.to(self.device))
+                # turn input into format required by neural network forward pass
+                inputs = inputs[:, None, :].float()
+                # zero the parameter gradients
+                self.optim.zero_grad()
 
-    def _predict(self, x: Tensor):
+                # forward + backward + optimize
+                self.loss.zero_grad()
+                outputs = self.network(inputs)
+                loss = self.loss(outputs, labels)
+                loss.backward()
+                self.optim.step()
+            if verbose:
+                s = f"---{epoch} EPOCHS FINISHED---\n"
+                self.training_message += s
+                print(s, end='')
+            if plugins:
+                s = f"Plugin messages for epoch {epoch}:\n"
+                self.training_message += s
+                print(s, end='')
+                for plugin in plugins:
+                    plugin(self, epoch)
+                self.training_message = '' # reset training message
+        if verbose:
+            s = f"Finished training all {epochs} epochs."
+            self.training_message = s
+            print(s)
+        return
+
+    def predict(self, x: Tensor):
         """
         to be implemented by concrete networks
         :param x:
@@ -289,6 +398,9 @@ class NNClassifier(Classifier):
             pred = self.network(x[:, None, :].float())
         self.network.train()
 
+        if pred.size()[1] == 260:
+            return self._260_argmax_to_36(pred)
+
         data_size = len(x)
         numbers = pred[:, :10]
         letters = pred[:, 10:]
@@ -298,4 +410,39 @@ class NNClassifier(Classifier):
         output = torch.zeros((data_size, 36), dtype=torch.int, device=self.device)
         output[range(data_size), num_pred] = 1
         output[range(data_size), letter_pred] = 1
+        return output
+
+    def _260_argmax_to_36(self, pred: Tensor):
+        """
+        argmax prediction - use the highest value as prediction
+        :param x:
+        :return:
+        """
+        if pred.size()[1] != 260:
+            return pred
+        data_size = len(pred)
+        index = torch.argmax(pred, dim=1)
+        num = index % 10
+        letter = (torch.div(index, Tensor([10]).to(self.device), rounding_mode='floor')) + 10
+        output = torch.zeros((data_size, 36), dtype=torch.int, device=self.device)
+        output[range(data_size), num.to(torch.long)] = 1
+        output[range(data_size), letter.to(torch.long)] = 1
+        return output
+
+    def _260_argmax(self, x: Tensor):
+        """
+        argmax prediction - use the highest value as prediction
+        :param x:
+        :return:
+        """
+        self.network.eval()
+        with torch.no_grad():
+            pred = self.network(x[:, None, :].float())
+        self.network.train()
+
+        data_size = len(x)
+        index = torch.argmax(pred, dim=1)
+
+        output = torch.zeros((data_size, 260), dtype=torch.int, device=self.device)
+        output[range(data_size), index] = 1
         return output

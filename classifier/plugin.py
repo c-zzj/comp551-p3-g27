@@ -189,8 +189,7 @@ def plot_train_val_performance(folder_path: Path,
                      label="training", alpha=0.5)
             plt.plot(epochs, val_performances,
                      label="validation", alpha=0.5)
-            ax = plt.gca()
-            ax.set_ylim([0., 1.])
+            plt.ylim(top=1, bottom=0.9)
             plt.xlabel('Number of epochs')
             plt.ylabel('Accuracy')
             plt.title(title)

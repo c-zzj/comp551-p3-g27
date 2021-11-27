@@ -1,0 +1,450 @@
+Model Summary:
+AlexNet(
+  (last_layer): Linear(in_features=4096, out_features=36, bias=True)
+  (conv-way0): Sequential(
+    (0): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Conv2d(16, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): Conv2d(64, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (9): LeakyReLU(negative_slope=0.01)
+    (10): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (11): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (12): LeakyReLU(negative_slope=0.01)
+    (13): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (14): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (15): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (16): LeakyReLU(negative_slope=0.01)
+    (17): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense-way0): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=3136, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Dropout(p=0.5, inplace=False)
+    (5): Linear(in_features=1024, out_features=1024, bias=True)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (conv-way1): Sequential(
+    (0): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Conv2d(16, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): Conv2d(64, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (9): LeakyReLU(negative_slope=0.01)
+    (10): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (11): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (12): LeakyReLU(negative_slope=0.01)
+    (13): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (14): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (15): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (16): LeakyReLU(negative_slope=0.01)
+    (17): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense-way1): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=3136, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Dropout(p=0.5, inplace=False)
+    (5): Linear(in_features=1024, out_features=1024, bias=True)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (conv-way2): Sequential(
+    (0): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Conv2d(16, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): Conv2d(64, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (9): LeakyReLU(negative_slope=0.01)
+    (10): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (11): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (12): LeakyReLU(negative_slope=0.01)
+    (13): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (14): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (15): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (16): LeakyReLU(negative_slope=0.01)
+    (17): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense-way2): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=3136, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Dropout(p=0.5, inplace=False)
+    (5): Linear(in_features=1024, out_features=1024, bias=True)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (conv-way3): Sequential(
+    (0): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Conv2d(16, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): Conv2d(64, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (9): LeakyReLU(negative_slope=0.01)
+    (10): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (11): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (12): LeakyReLU(negative_slope=0.01)
+    (13): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (14): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (15): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (16): LeakyReLU(negative_slope=0.01)
+    (17): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense-way3): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=3136, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Dropout(p=0.5, inplace=False)
+    (5): Linear(in_features=1024, out_features=1024, bias=True)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+)
+Device used for training: cuda:0
+Size of training set: 24000
+Size of validation set: 6000
+---1 EPOCHS FINISHED---
+Plugin messages for epoch 1:
+TRAIN: 0.15858333333333333	VAL: 0.13566666666666666
+---2 EPOCHS FINISHED---
+Plugin messages for epoch 2:
+TRAIN: 0.5222083333333334	VAL: 0.4633333333333333
+---3 EPOCHS FINISHED---
+Plugin messages for epoch 3:
+TRAIN: 0.6902916666666666	VAL: 0.6121666666666666
+---4 EPOCHS FINISHED---
+Plugin messages for epoch 4:
+TRAIN: 0.7955416666666667	VAL: 0.7106666666666667
+---5 EPOCHS FINISHED---
+Plugin messages for epoch 5:
+TRAIN: 0.8541666666666666	VAL: 0.7475
+---6 EPOCHS FINISHED---
+Plugin messages for epoch 6:
+TRAIN: 0.9016666666666666	VAL: 0.7918333333333333
+---7 EPOCHS FINISHED---
+Plugin messages for epoch 7:
+TRAIN: 0.9217083333333334	VAL: 0.823
+---8 EPOCHS FINISHED---
+Plugin messages for epoch 8:
+TRAIN: 0.9400833333333334	VAL: 0.822
+---9 EPOCHS FINISHED---
+Plugin messages for epoch 9:
+TRAIN: 0.954375	VAL: 0.8418333333333333
+---10 EPOCHS FINISHED---
+Plugin messages for epoch 10:
+TRAIN: 0.9649166666666666	VAL: 0.8478333333333333
+---11 EPOCHS FINISHED---
+Plugin messages for epoch 11:
+TRAIN: 0.9820833333333333	VAL: 0.8708333333333333
+---12 EPOCHS FINISHED---
+Plugin messages for epoch 12:
+TRAIN: 0.9864166666666667	VAL: 0.8775
+---13 EPOCHS FINISHED---
+Plugin messages for epoch 13:
+TRAIN: 0.983875	VAL: 0.8718333333333333
+---14 EPOCHS FINISHED---
+Plugin messages for epoch 14:
+TRAIN: 0.9916666666666667	VAL: 0.8803333333333333
+---15 EPOCHS FINISHED---
+Plugin messages for epoch 15:
+TRAIN: 0.9946666666666667	VAL: 0.8895
+---16 EPOCHS FINISHED---
+Plugin messages for epoch 16:
+TRAIN: 0.9889583333333334	VAL: 0.869
+---17 EPOCHS FINISHED---
+Plugin messages for epoch 17:
+TRAIN: 0.9908333333333333	VAL: 0.8758333333333334
+---18 EPOCHS FINISHED---
+Plugin messages for epoch 18:
+TRAIN: 0.9931666666666666	VAL: 0.8891666666666667
+---19 EPOCHS FINISHED---
+Plugin messages for epoch 19:
+TRAIN: 0.996625	VAL: 0.8921666666666667
+---20 EPOCHS FINISHED---
+Plugin messages for epoch 20:
+TRAIN: 0.9970416666666667	VAL: 0.894
+---21 EPOCHS FINISHED---
+Plugin messages for epoch 21:
+TRAIN: 0.9970416666666667	VAL: 0.8983333333333333
+---22 EPOCHS FINISHED---
+Plugin messages for epoch 22:
+TRAIN: 0.9953333333333333	VAL: 0.885
+---23 EPOCHS FINISHED---
+Plugin messages for epoch 23:
+TRAIN: 0.99575	VAL: 0.8798333333333334
+---24 EPOCHS FINISHED---
+Plugin messages for epoch 24:
+TRAIN: 0.9959583333333333	VAL: 0.9
+---25 EPOCHS FINISHED---
+Plugin messages for epoch 25:
+TRAIN: 0.99825	VAL: 0.9011666666666667
+---26 EPOCHS FINISHED---
+Plugin messages for epoch 26:
+TRAIN: 0.9974583333333333	VAL: 0.902
+---27 EPOCHS FINISHED---
+Plugin messages for epoch 27:
+TRAIN: 0.9979583333333333	VAL: 0.8985
+---28 EPOCHS FINISHED---
+Plugin messages for epoch 28:
+TRAIN: 0.9979583333333333	VAL: 0.907
+---29 EPOCHS FINISHED---
+Plugin messages for epoch 29:
+TRAIN: 0.999375	VAL: 0.9055
+---30 EPOCHS FINISHED---
+Plugin messages for epoch 30:
+TRAIN: 0.9988333333333334	VAL: 0.9088333333333334
+Model Summary:
+AlexNet(
+  (last_layer): Linear(in_features=4096, out_features=36, bias=True)
+  (conv1_way0): Sequential(
+    (0): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Conv2d(16, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (conv2_way0): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): LeakyReLU(negative_slope=0.01)
+    (2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (4): LeakyReLU(negative_slope=0.01)
+    (5): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): LeakyReLU(negative_slope=0.01)
+    (9): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense1_way0): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=12544, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense2_way0): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=4096, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (conv1_way1): Sequential(
+    (0): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Conv2d(16, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (conv2_way1): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): LeakyReLU(negative_slope=0.01)
+    (2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (4): LeakyReLU(negative_slope=0.01)
+    (5): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): LeakyReLU(negative_slope=0.01)
+    (9): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense1_way1): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=12544, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense2_way1): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=4096, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (conv1_way2): Sequential(
+    (0): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Conv2d(16, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (conv2_way2): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): LeakyReLU(negative_slope=0.01)
+    (2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (4): LeakyReLU(negative_slope=0.01)
+    (5): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): LeakyReLU(negative_slope=0.01)
+    (9): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense1_way2): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=12544, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense2_way2): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=4096, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (conv1_way3): Sequential(
+    (0): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): Conv2d(16, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): LeakyReLU(negative_slope=0.01)
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (conv2_way3): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): LeakyReLU(negative_slope=0.01)
+    (2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (4): LeakyReLU(negative_slope=0.01)
+    (5): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): LeakyReLU(negative_slope=0.01)
+    (9): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense1_way3): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=12544, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (dense2_way3): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=4096, out_features=1024, bias=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+)
+Device used for training: cuda:0
+Size of training set: 27000
+Size of validation set: 3000
+---1 EPOCHS FINISHED---
+Plugin messages for epoch 1:
+TRAIN: 0.20162962962962963	VAL: 0.17933333333333334
+---2 EPOCHS FINISHED---
+Plugin messages for epoch 2:
+TRAIN: 0.614	VAL: 0.5476666666666666
+---3 EPOCHS FINISHED---
+Plugin messages for epoch 3:
+TRAIN: 0.8168518518518518	VAL: 0.746
+---4 EPOCHS FINISHED---
+Plugin messages for epoch 4:
+TRAIN: 0.8888888888888888	VAL: 0.8086666666666666
+---5 EPOCHS FINISHED---
+Plugin messages for epoch 5:
+TRAIN: 0.9368518518518518	VAL: 0.8463333333333334
+---6 EPOCHS FINISHED---
+Plugin messages for epoch 6:
+TRAIN: 0.94	VAL: 0.849
+---7 EPOCHS FINISHED---
+Plugin messages for epoch 7:
+TRAIN: 0.9705185185185186	VAL: 0.8883333333333333
+---8 EPOCHS FINISHED---
+Plugin messages for epoch 8:
+TRAIN: 0.9819629629629629	VAL: 0.8903333333333333
+---9 EPOCHS FINISHED---
+Plugin messages for epoch 9:
+TRAIN: 0.9925185185185185	VAL: 0.913
+---10 EPOCHS FINISHED---
+Plugin messages for epoch 10:
+TRAIN: 0.9947777777777778	VAL: 0.9156666666666666
+---11 EPOCHS FINISHED---
+Plugin messages for epoch 11:
+TRAIN: 0.9935185185185185	VAL: 0.916
+---12 EPOCHS FINISHED---
+Plugin messages for epoch 12:
+TRAIN: 0.9965925925925926	VAL: 0.9216666666666666
+---13 EPOCHS FINISHED---
+Plugin messages for epoch 13:
+TRAIN: 0.9952222222222222	VAL: 0.9186666666666666
+---14 EPOCHS FINISHED---
+Plugin messages for epoch 14:
+TRAIN: 0.9965185185185185	VAL: 0.9263333333333333
+---15 EPOCHS FINISHED---
+Plugin messages for epoch 15:
+TRAIN: 0.9969629629629629	VAL: 0.9233333333333333
+---16 EPOCHS FINISHED---
+Plugin messages for epoch 16:
+TRAIN: 0.9987777777777778	VAL: 0.9276666666666666
+---17 EPOCHS FINISHED---
+Plugin messages for epoch 17:
+TRAIN: 0.998	VAL: 0.9283333333333333
+---18 EPOCHS FINISHED---
+Plugin messages for epoch 18:
+TRAIN: 0.9994444444444445	VAL: 0.9436666666666667
+---19 EPOCHS FINISHED---
+Plugin messages for epoch 19:
+TRAIN: 0.9992592592592593	VAL: 0.9353333333333333
+---20 EPOCHS FINISHED---
+Plugin messages for epoch 20:
+TRAIN: 0.9990740740740741	VAL: 0.9343333333333333
+---21 EPOCHS FINISHED---
+Plugin messages for epoch 21:
+TRAIN: 0.9994444444444445	VAL: 0.938
+---22 EPOCHS FINISHED---
+Plugin messages for epoch 22:
+TRAIN: 0.9995185185185185	VAL: 0.947
+---23 EPOCHS FINISHED---
+Plugin messages for epoch 23:
+TRAIN: 0.9995925925925926	VAL: 0.9403333333333334
+---24 EPOCHS FINISHED---
+Plugin messages for epoch 24:
+TRAIN: 0.9992962962962963	VAL: 0.9393333333333334
+---25 EPOCHS FINISHED---
+Plugin messages for epoch 25:
+TRAIN: 0.9994444444444445	VAL: 0.9423333333333334
+---26 EPOCHS FINISHED---
+Plugin messages for epoch 26:
+TRAIN: 0.9991481481481481	VAL: 0.9366666666666666
+---27 EPOCHS FINISHED---
+Plugin messages for epoch 27:
+TRAIN: 0.9998888888888889	VAL: 0.948
+---28 EPOCHS FINISHED---
+Plugin messages for epoch 28:
+TRAIN: 0.9997037037037036	VAL: 0.9396666666666667
+---29 EPOCHS FINISHED---
+Plugin messages for epoch 29:
+TRAIN: 0.9998148148148148	VAL: 0.942
+---30 EPOCHS FINISHED---
+Plugin messages for epoch 30:
+TRAIN: 0.9998888888888889	VAL: 0.946

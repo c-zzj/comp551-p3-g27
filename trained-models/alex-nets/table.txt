@@ -1,0 +1,50 @@
+1-way:
+1,1,2 1st - train:.999 val:.933  2nd - train:.998 val:.925
+1,1,3 1st - train:.999 val:.937  2nd - train:.998 val:.936
+1,2,2 1st - train:.999 val:.941  2nd - train:.999 val:.938
+1,2,3 1st - train:.999 val:.942  2nd - train:.998 val:.938
+2,2,4 1st - train:.999 val:.942  2nd - train:.998 val:.941
+2,3,3 1st - train:.999 val:.953  2nd - train:.999 val:.951
+2,3,4 1st - train:.999 val:.950  2nd - train:.997 val:.949
+3,3,5 1st - train:.997 val:.949  2nd - train:.997 val:.949
+3,4,4 1st - train:.997 val:.961* 2nd - train:.996 val:.958* epoch 29
+3,4,5 1st - train:.995 val:.953  2nd - train:.996 val:.951
+
+2-way:
+1,1,2 1st - train:.999 val:.941  2nd - train:.999 val:.936
+1,1,3 1st - train:.999 val:.945 2nd - train:.999 val:.944
+1,2,2 1st - train:.999 val:.958 2nd - train:.999 val:.956
+1,2,3 1st - train:.999 val:.949 2nd - train:.999 val:.943
+2,2,4 1st - train:.999 val:.954 2nd - train:.998 val:.950
+2,3,3 1st - train:.999 val:.959 2nd - train:.999 val:.955
+2,3,4 1st - train:.999 val:.954 2nd - train:.998 val:.953
+3,3,5 1st - train:.998 val:.960 2nd - train:.999 val:.958*
+3,4,4 1st - train:.998 val:.962* 2nd - train:.998 val:.958*
+3,4,5 1st - train:.999 val:.950 2nd - train:.999 val:.948
+
+3-way:
+3,4,4 1st - train:.999 val:.952 2nd - train:.998 val:.950
+
+4-way:
+3,4,4 1st - train:.999 val:.959 2nd - train:.999 val:.956
+
+scaled: epoch26
+1-way 3,4,4 1st - train:.996 val:.956 2nd - train:.996 val:.955
+
+relabeled: epoch20
+1-way 3,4,4 1st - train:.996 val:.947 2nd - train:.989 val:.943
+
+scaled + relabeled: epoch26
+1-way 3,4,4 1st - train:.993 val:.947 2nd - train:.992 val:.944
+
+rotation augmented: epoch28, 25
+1-way 3,4,4 1st - train:.999 val:.971 2nd - train:.999 val:.968
+
+rotation augmented scaled: epoch30, 29
+1-way 3,4,4 1st - train:.999 val:.968 2nd - train:.999 val:.967
+
+rotation augmented relabeled: epoch7, 14
+1-way 3,4,4 1st - train:.985 val:.961 2nd - train:.996 val:.961
+
+rotation augmented scaled + relabeled: 28
+1-way 3,4,4 1st - train:.998 val:.962 2nd - train:.998 val:.962

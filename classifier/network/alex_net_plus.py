@@ -64,10 +64,10 @@ class AlexNetPlusClassifier(NNClassifier):
         :param validation: the validation set
         :param training_ul: (optional) the unlabeled dataset
         """
-        super(AlexNetPlusClassifier, self).__init__(AlexNetPlus, training_l, validation, training_ul)
+        super(AlexNetPlusClassifier, self).__init__(AlexNetPlus(), training_l, validation, training_ul)
         self.optim = SGD(self.network.parameters(), lr=1e-3, momentum=0.99)
         self.loss = CrossEntropyLoss()
 
-    def _predict(self, x: Tensor):
+    def predict(self, x: Tensor):
         return self._original_36_argmax(x)
 

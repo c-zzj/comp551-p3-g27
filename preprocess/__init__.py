@@ -29,6 +29,62 @@ def process_data(dataset: Union[LabeledDataset, UnlabeledDataset],
     return dataset
 
 
+def preprocess_260_labels(dataset: LabeledDataset, batch_size=1000) -> LabeledDataset:
+    """
+
+    :param dataset:
+    :param rotations:
+    :return:
+    """
+    if type(dataset) == UnlabeledDataset:
+        return dataset
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
+    d = device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    result_x = Tensor([])
+    result_y = Tensor([])
+    for i, data in enumerate(loader, 0):
+        x, y = data[0].to(d), data[1].to(d)
+        result_x = torch.cat((result_x, x.clone().detach().to('cpu')), dim=0)
+
+        numbers = y[:, :10]
+        letters = y[:, 10:]
+        num = torch.argmax(numbers, dim=1)
+        letter = torch.argmax(letters, dim=1)
+        new_y = torch.zeros((len(y), 260), dtype=torch.int, device=d)
+        new_y[range(len(y)), letter * 10 + num] = 1
+        result_y = torch.cat((result_y, new_y.to('cpu')), dim=0)
+    return LabeledDataset(result_x, result_y)
+
+
+def preprocess_scale_image(dataset: Union[LabeledDataset, UnlabeledDataset], batch_size=1000) -> Union[LabeledDataset, UnlabeledDataset]:
+    """
+
+    :param dataset:
+    :param scale:
+    :param batch_size:
+    :return:
+    """
+    if type(dataset) == UnlabeledDataset:
+        loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
+        d = device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        result_x = Tensor([])
+        target_size = 56 * 2
+        for i, data in enumerate(loader, 0):
+            x = data.to(d)
+            result_x = torch.cat((result_x, TF.resize(x, [target_size, target_size]).to('cpu')), dim=0)
+        return UnlabeledDataset(result_x,)
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
+    d = device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    result_x = Tensor([])
+    result_y = Tensor([])
+    target_size = 56*2
+    for i, data in enumerate(loader, 0):
+        x, y = data[0].to(d), data[1]
+        result_x = torch.cat((result_x, TF.resize(x, [target_size, target_size]).to('cpu')), dim=0)
+        result_y = torch.cat((result_y, y.clone().detach()), dim=0)
+    return LabeledDataset(result_x, result_y)
+
+
 def preprocess_rotate(dataset: LabeledDataset, rotations: List[int], batch_size=1000)-> LabeledDataset:
     """
 
