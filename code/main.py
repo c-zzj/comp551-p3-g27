@@ -64,7 +64,7 @@ def run_alex(n_way: int, depth: Tuple[int, int, int], scaled: bool, relabeled: b
         trained_alex_net_PATH = Path(Path(str(trained_alex_net_PATH) + "-rotation-augmented"))
         alex_net_WRONG_PRED_PATH = Path(Path(str(alex_net_WRONG_PRED_PATH) + "-rotation-augmented"))
         if ignorext:
-            trained_alex_net_PATH = Path(Path(str(trained_alex_net_PATH) + "-ignorext"))
+            trained_alex_net_PATH = Path(Path(str(trained_alex_net_PATH) + "-rotation-augmented-ignorext"))
             alex_net_WRONG_PRED_PATH = Path(
                 Path(str(alex_net_WRONG_PRED_PATH) + "-rotation-augmented-ignorext"))
 
@@ -132,6 +132,7 @@ def run_alex(n_way: int, depth: Tuple[int, int, int], scaled: bool, relabeled: b
                    ])
     alex.extract_wrong_pred_entries(alex_net_WRONG_PRED_PATH)
 
+
 def run_committee_val():
     training_set = read_train_labeled(DATASET_PATH)
     validation_proportion = 0.1
@@ -149,7 +150,7 @@ def run_committee_val():
     p3 = {'n_way': 1, 'depth': (3, 4, 4), 'scaled': False, 'relabeled': True}
     p4 = {'n_way': 1, 'depth': (3, 4, 4), 'scaled': True, 'relabeled': True}
 
-    original = Path(TRAINED_MODELS_PATH / 'alex-nets-rotation-augmented-ignorext' / '1way-depth(3, 4, 4)')
+    original = Path(TRAINED_MODELS_PATH / 'alex-nets-rotation-augmented' / '1way-depth(3, 4, 4)')
     scaled = Path(TRAINED_MODELS_PATH / 'alex-nets-rotation-augmented-scaled' / '1way-depth(3, 4, 4)')
     relabeled = Path(TRAINED_MODELS_PATH / 'alex-nets-rotation-augmented-relabeled' / '1way-depth(3, 4, 4)')
     scaled_relabeled = Path(
@@ -181,7 +182,7 @@ def run_committee_val():
         x = data[0].to(alex1.device)
         pred2 = torch.cat((pred2, Function.label_to_36_argmax(alex2.predict(x), device=alex1.device)), dim=0)
         pred4 = torch.cat((pred4, Function.label_to_36_argmax(alex4.predict(x), device=alex3.device)), dim=0)
-    pred = pred1 *2 + pred2 *1 + pred3 *0.9 + pred4 *0.8
+    pred = pred1 * 1.2 + pred2 * 1.1 + pred3 + pred4
 
     original = Path(TRAINED_MODELS_PATH / 'alex-nets' / '1way-depth(3, 4, 4)-fixmatch')
     scaled = Path(TRAINED_MODELS_PATH / 'alex-nets-scaled' / '1way-depth(3, 4, 4)-fixmatch')
@@ -215,7 +216,7 @@ def run_committee_val():
         x = data[0].to(alex1.device)
         pred2 = torch.cat((pred2, Function.label_to_36_argmax(alex2.predict(x), device=alex1.device)), dim=0)
         pred4 = torch.cat((pred4, Function.label_to_36_argmax(alex4.predict(x), device=alex3.device)), dim=0)
-    pred += pred1 *1.2 + pred2 *1.1 + pred3 *1 + pred4 *0.9
+    pred += pred1 + pred2*1.1 + pred3 + pred4
 
 
 
@@ -255,7 +256,7 @@ def run_committee_test():
     p3 = {'n_way': 1, 'depth': (3, 4, 4), 'scaled': False, 'relabeled': True}
     p4 = {'n_way': 1, 'depth': (3, 4, 4), 'scaled': True, 'relabeled': True}
 
-    original = Path(TRAINED_MODELS_PATH / 'alex-nets-rotation-augmented-ignorext' / '1way-depth(3, 4, 4)')
+    original = Path(TRAINED_MODELS_PATH / 'alex-nets-rotation-augmented' / '1way-depth(3, 4, 4)')
     scaled = Path(TRAINED_MODELS_PATH / 'alex-nets-rotation-augmented-scaled' / '1way-depth(3, 4, 4)')
     relabeled = Path(TRAINED_MODELS_PATH / 'alex-nets-rotation-augmented-relabeled' / '1way-depth(3, 4, 4)')
     scaled_relabeled = Path(TRAINED_MODELS_PATH / 'alex-nets-rotation-augmented-scaled-relabeled' / '1way-depth(3, 4, 4)')
@@ -283,7 +284,7 @@ def run_committee_test():
         x = data.to(alex1.device)
         pred2 = torch.cat((pred2, Function.label_to_36_argmax(alex2.predict(x), device=alex1.device)), dim=0)
         pred4 = torch.cat((pred4, Function.label_to_36_argmax(alex4.predict(x), device=alex3.device)), dim=0)
-    pred = pred1 *2 + pred2 *0.8 + pred3 *0.7 + pred4 *0.6
+    pred = pred1*1.2 + pred2*1.1 + pred3 + pred4
 
 
     original = Path(TRAINED_MODELS_PATH / 'alex-nets' / '1way-depth(3, 4, 4)-fixmatch')
@@ -315,7 +316,7 @@ def run_committee_test():
         x = data.to(alex1.device)
         pred2 = torch.cat((pred2, Function.label_to_36_argmax(alex2.predict(x), device=alex1.device)), dim=0)
         pred4 = torch.cat((pred4, Function.label_to_36_argmax(alex4.predict(x), device=alex3.device)), dim=0)
-    pred += pred1 *1.2 + pred2 *1.1 + pred3 *1 + pred4 *0.9
+    pred += pred1 + pred2 * 1.1 + pred3 + pred4
 
 
 
@@ -413,8 +414,8 @@ if __name__ == '__main__':
     #                  data_folder=DATASET_PATH,
     #                  model_path=Path(TRAINED_MODELS_PATH / 'alex-nets-rotation-augmented' / '1way-depth(3, 4, 4)'))
 
-    run_committee_val()
-    #run_committee_test()
+    #run_committee_val()
+    run_committee_test()
 
     # training_set = read_train_labeled(DATASET_PATH)
     # validation_proportion = 0.1
