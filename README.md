@@ -1,8 +1,8 @@
-# comp551-p3-g27
+# COMP 551, Third Project, Group 27
 
-COMP 551, Third Project
+Members: Dailun Li, Kevin Xu, Zijun Zhao
 
 Multi-label classification of handwritten digits and english alphabet
 
-Members: Dailun Li, Kevin Xu, Zijun Zhao
+The dataset: https://www.kaggle.com/c/comp-551-fall-2021/data
 
